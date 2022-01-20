@@ -55,7 +55,7 @@ namespace CatalogResizer
                 }
                 // Our final value is in path
                 textbox.Text = path;
-            return path;
+                return path;
             }
             return "";
         }
