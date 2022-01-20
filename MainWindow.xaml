@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CatalogResizer"
         mc:Ignorable="d"
-        Title="CatalogResizer" Height="399" Width="800" MinHeight="397" MinWidth="700" Icon="Resource/resize.ico" WindowStartupLocation="CenterScreen">
+        Title="CatalogResizer" Height="429" Width="800" MinHeight="397" MinWidth="700" Icon="Resource/resize.ico" WindowStartupLocation="CenterScreen">
     <Window.TaskbarItemInfo>
         <TaskbarItemInfo Description="asdad"/>
     </Window.TaskbarItemInfo>
@@ -24,7 +24,7 @@
         <TextBox x:Name="FilesFolderPathTB" Grid.ColumnSpan="2" Grid.Column="1" Height="23" Margin="10,41,10,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
         <Button x:Name="ChoseFolderForCompressFilesBTN" Grid.ColumnSpan="2" Content="Выбрать папку для сжатых файлов" Margin="10,122,10,0" Grid.Column="1" Height="20" VerticalAlignment="Top" Click="ChoseFolderForCompressFilesBTN_Click"/>
         <TextBox x:Name="CompressFilesFolderPathTB" Grid.ColumnSpan="2" Grid.Column="1" Height="23" Margin="10,94,10,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
-        <Border BorderBrush="#FFABADB3" BorderThickness="1" Grid.Column="1" Height="125" Margin="10,147,10,0" VerticalAlignment="Top" Grid.ColumnSpan="2">
+        <Border BorderBrush="#FFABADB3" BorderThickness="1" Grid.Column="1" Height="127" Margin="10,174,10,0" VerticalAlignment="Top" Grid.ColumnSpan="2">
             <StackPanel Height="119" Margin="3,3,3,3" VerticalAlignment="Top">
                 <Label Content="Уровень качества сжатых фото" Height="26"/>
                 <RadioButton x:Name="RB100" Content="100%"/>
@@ -35,10 +35,14 @@
                 <RadioButton x:Name="RB50" Content="50%"/>
             </StackPanel>
         </Border>
-        <Button x:Name="CompressBTN" Content="Сжать и переместить" Grid.Column="1" Margin="10,328,10,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Click="CompressBTN_Click" Height="20"/>
-        <CheckBox x:Name="ResizeCHB" Content="Изменять разрешение на 1280х1920" Grid.Column="1" Margin="10,277,10,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Height="15" AutomationProperties.HelpText="Принудительно откорректирует разрешение фотографии до 1280х1920 без учета соотношения сторон фотографии"/>
-        <Label Content="Тайм-аут между процессами (мс)" Grid.Column="1" Margin="10,297,62,0" VerticalAlignment="Top" Grid.ColumnSpan="2" AutomationProperties.HelpText="Опреляет, какое количество времени пройдет между началом обработки предыдущей и следующей картинки" Padding="0,5,5,5"/>
-        <TextBox x:Name="TimeOutTB" Grid.Column="2" Height="19" Margin="0,301,10,0" TextWrapping="Wrap" Text="1500" VerticalAlignment="Top" Width="47" PreviewTextInput="TimeOutTB_PreviewTextInput" HorizontalAlignment="Right" AutomationProperties.HelpText="Опреляет, какое количество времени пройдет между началом обработки предыдущей и следующей картинки"/>
+        <Button x:Name="CompressBTN" Content="Сжать и переместить" Grid.Column="1" Margin="10,357,10,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Click="CompressBTN_Click" Height="20"/>
+        <CheckBox x:Name="ResizeCHB" Content="Изменять разрешение на 1280х1920" Grid.Column="1" Margin="10,306,10,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Height="15" AutomationProperties.HelpText="Принудительно откорректирует разрешение фотографии до 1280х1920 без учета соотношения сторон фотографии"/>
+        <Label Content="Тайм-аут между процессами (мс)" Grid.Column="1" Margin="10,326,62,0" VerticalAlignment="Top" Grid.ColumnSpan="2" AutomationProperties.HelpText="Опреляет, какое количество времени пройдет между началом обработки предыдущей и следующей картинки" Padding="0,5,5,5"/>
+        <TextBox x:Name="TimeOutTB" Grid.Column="2" Height="19" Margin="0,330,10,0" TextWrapping="Wrap" Text="1500" VerticalAlignment="Top" Width="47" PreviewTextInput="TimeOutTB_PreviewTextInput" HorizontalAlignment="Right" AutomationProperties.HelpText="Опреляет, какое количество времени пройдет между началом обработки предыдущей и следующей картинки"/>
+        <ComboBox x:Name="LibChoiceCB" Grid.Column="1" HorizontalAlignment="Left" Margin="10,147,0,0" VerticalAlignment="Top" Width="252" Grid.ColumnSpan="2" SelectionChanged="LibChoiceCB_SelectionChanged" SelectedIndex="0">
+            <TextBlock>libwebp</TextBlock>
+            <TextBlock>pingo</TextBlock>
+        </ComboBox>
 
     </Grid>
 </Window>

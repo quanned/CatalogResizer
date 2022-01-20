@@ -22,6 +22,8 @@ namespace CatalogResizer
     /// </summary>
     public partial class MainWindow : Window
     {
+        int selectedAlgoritm = 0; //default choice - libwebp
+
         public MainWindow()
         {
             InitializeComponent();
@@ -70,6 +72,10 @@ namespace CatalogResizer
 
         private void CompressBTN_Click(object sender, RoutedEventArgs e)
         {
+            if (selectedAlgoritm == 0)
+            {
+                
+            }
             string pathToFolderWithCropFiles = CompressFilesFolderPathTB.Text; 
             string pathToFolderWithFiles = FilesFolderPathTB.Text;
 
@@ -107,36 +113,75 @@ namespace CatalogResizer
             }
 
             var timer = Stopwatch.StartNew();
-
-            string command = "";
-            for (int i = 0; i < filesArray.Length; i++)
+            if (selectedAlgoritm == 0)
             {
-                if (ResizeCHB.IsChecked == true)
+                string command = "";
+                for (int i = 0; i < filesArray.Length; i++)
                 {
-                    command = "/C cwebp -q " + compressLevel + " -resize 1280 1920 " + filesArray[i].ToString() + " -o " + pathToFolderWithCropFiles + filesArray[i].ToString().Remove(0, FilesFolderPathTB.Text.Length);
+                    if (ResizeCHB.IsChecked == true)
+                    {
+                        command = "/C cwebp -q " + compressLevel + " -resize 1280 1920 " + filesArray[i].ToString() + " -o " + pathToFolderWithCropFiles + filesArray[i].ToString().Remove(0, FilesFolderPathTB.Text.Length);
+                    }
+                    else
+                    {
+                        command = "/C cwebp -q " + compressLevel + " " + filesArray[i].ToString() + " -o " + pathToFolderWithCropFiles + filesArray[i].ToString().Remove(0, FilesFolderPathTB.Text.Length);
+                    }
+
+                    System.Diagnostics.Process.Start("CMD.exe", command);
+                    System.Threading.Thread.Sleep(timeout);
+                    //Console.WriteLine(command.ToString());
+                    Log("run this command: " + command);
+                    command = "";
+                    //example: cwebp - q 80 - resize 1920 1080 m.jpg - o m2.jpg
                 }
-                else
-                {
-                    command = "/C cwebp -q " + compressLevel + " " + filesArray[i].ToString() + " -o " + pathToFolderWithCropFiles + filesArray[i].ToString().Remove(0, FilesFolderPathTB.Text.Length);
-                }
-                
-                System.Diagnostics.Process.Start("CMD.exe", command);
-                System.Threading.Thread.Sleep(timeout);
-                //Console.WriteLine(command.ToString());
-                Log("run this command: " + command);
-                command = "";
-                //example: cwebp - q 80 - resize 1920 1080 m.jpg - o m2.jpg
             }
+            else
+            {
+                string command = "";
+                for (int i = 0; i < filesArray.Length; i++)
+                {
+                    if (ResizeCHB.IsChecked == true)
+                    {
+                        command = "/C pingo.exe -jpgquality=" + compressLevel + " -resize=1920 " + filesArray[i].ToString();
+                    }
+                    else
+                    {
+                        command = "/C pingo.exe -jpgquality=" + compressLevel + " " + filesArray[i].ToString();
+                    }
+
+                    System.Diagnostics.Process.Start("CMD.exe", command);
+                    System.Threading.Thread.Sleep(timeout);
+                    //Console.WriteLine(command.ToString());
+                    Log("run this command: " + command);
+                    command = "";
+                    //example:/C pingo.exe -jpgquality=100 [-resize=1920] m.jpg
+                }
+            }
+
 
             timer.Stop();
             int seconds = System.Int32.Parse(((timer.ElapsedMilliseconds / 1000) % 60).ToString());
             int minutes = System.Int32.Parse(((timer.ElapsedMilliseconds / 1000) / 60).ToString());
 
-            string[] cropFilesArray = Directory.GetFiles(pathToFolderWithCropFiles, "*.jpg");
-            foreach (string filename in cropFilesArray)
+            string[] cropFilesArray;
+
+            if (selectedAlgoritm == 0)
             {
-                CompressLB.Items.Add(filename);
-                Log("add output file: " + filename);
+                cropFilesArray = Directory.GetFiles(pathToFolderWithCropFiles, "*.jpg");
+                foreach (string filename in cropFilesArray)
+                {
+                    CompressLB.Items.Add(filename);
+                    Log("add output file: " + filename);
+                }
+            }
+            else
+            {
+                cropFilesArray = Directory.GetFiles(pathToFolderWithFiles, "*.jpg");
+                foreach (string filename in cropFilesArray)
+                {
+                    CompressLB.Items.Add(filename);
+                    Log("add output file: " + filename);
+                }
             }
 
             System.Threading.Thread.Sleep(5000);
@@ -193,6 +238,12 @@ namespace CatalogResizer
         private void CompressLB_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             System.Diagnostics.Process.Start(CompressLB.SelectedItem.ToString());
+        }
+
+        private void LibChoiceCB_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            //MessageBox.Show(LibChoiceCB.SelectedIndex.ToString());
+            selectedAlgoritm = LibChoiceCB.SelectedIndex;
         }
     }
 }
