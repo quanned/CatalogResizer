@@ -1,0 +1,16 @@
+D:\project\CatalogResizer\CatalogResizer\bin\x64\Debug\CatalogResizer.exe.config
+D:\project\CatalogResizer\CatalogResizer\bin\x64\Debug\CatalogResizer.exe
+D:\project\CatalogResizer\CatalogResizer\bin\x64\Debug\CatalogResizer.pdb
+D:\project\CatalogResizer\CatalogResizer\obj\x64\Debug\CatalogResizer.csproj.AssemblyReference.cache
+D:\project\CatalogResizer\CatalogResizer\obj\x64\Debug\CatalogResizer.csproj.SuggestedBindingRedirects.cache
+D:\project\CatalogResizer\CatalogResizer\obj\x64\Debug\MainWindow.g.cs
+D:\project\CatalogResizer\CatalogResizer\obj\x64\Debug\App.g.cs
+D:\project\CatalogResizer\CatalogResizer\obj\x64\Debug\CatalogResizer_MarkupCompile.cache
+D:\project\CatalogResizer\CatalogResizer\obj\x64\Debug\CatalogResizer_MarkupCompile.lref
+D:\project\CatalogResizer\CatalogResizer\obj\x64\Debug\MainWindow.baml
+D:\project\CatalogResizer\CatalogResizer\obj\x64\Debug\CatalogResizer.g.resources
+D:\project\CatalogResizer\CatalogResizer\obj\x64\Debug\CatalogResizer.Properties.Resources.resources
+D:\project\CatalogResizer\CatalogResizer\obj\x64\Debug\CatalogResizer.csproj.GenerateResource.cache
+D:\project\CatalogResizer\CatalogResizer\obj\x64\Debug\CatalogResizer.csproj.CoreCompileInputs.cache
+D:\project\CatalogResizer\CatalogResizer\obj\x64\Debug\CatalogResizer.exe
+D:\project\CatalogResizer\CatalogResizer\obj\x64\Debug\CatalogResizer.pdb

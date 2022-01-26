@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CatalogResizer"
         mc:Ignorable="d"
-        Title="CatalogResizer" Height="429" Width="800" MinHeight="397" MinWidth="700" Icon="Resource/resize.ico" WindowStartupLocation="CenterScreen">
+        Title="CatalogResizer" Height="429" Width="800" MinHeight="427" MinWidth="700" Icon="Resource/resize.ico" WindowStartupLocation="CenterScreen">
     <Window.TaskbarItemInfo>
         <TaskbarItemInfo Description="asdad"/>
     </Window.TaskbarItemInfo>

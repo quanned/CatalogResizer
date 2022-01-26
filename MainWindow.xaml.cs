@@ -62,17 +62,27 @@ namespace CatalogResizer
 
         private void CompressBTN_Click(object sender, RoutedEventArgs e)
         {
-            if (selectedAlgoritm == 0)
-            {
-                
-            }
-            string pathToFolderWithCropFiles = CompressFilesFolderPathTB.Text; 
+            FilesLB.Items.Clear();
+            CompressLB.Items.Clear();
+
+            string pathToFolderWithCropFiles = CompressFilesFolderPathTB.Text;
             string pathToFolderWithFiles = FilesFolderPathTB.Text;
 
-            if (pathToFolderWithFiles == "")
+            if (pathToFolderWithFiles == "" || pathToFolderWithCropFiles == "")
             {
-                MessageBox.Show("Неправильно выбрана папка", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Неправильно выбрана папка", "Error", MessageBoxButton.OKCancel, MessageBoxImage.Error);
             }
+
+            if (!Directory.Exists(pathToFolderWithCropFiles))
+            {
+                Directory.CreateDirectory(pathToFolderWithCropFiles);
+            }
+            if (!Directory.Exists(pathToFolderWithFiles))
+            {
+                Directory.CreateDirectory(pathToFolderWithFiles);
+            }
+
+
 
             string[] filesArray = Directory.GetFiles(pathToFolderWithFiles, "*.jpg");
             foreach (string filename in filesArray)
@@ -93,36 +103,54 @@ namespace CatalogResizer
             }
 
             int timeout = Convert.ToInt32(TimeOutTB.Text);
-            if(timeout <= 500)
+            if (timeout <= 500)
             {
                 MessageBoxResult result = MessageBox.Show("Выбран низкий уровень задержки между запусками процессов. \nЭто может привести к появлению большого количества параллельных процессов и нагрузит систему. \nВы действительно хотите продолжить с заданными вами условиями?", "Info", MessageBoxButton.YesNo, MessageBoxImage.Information);
-                if(result == MessageBoxResult.No)
+                if (result == MessageBoxResult.No)
                 {
                     timeout = 1500;
                 }
             }
 
             var timer = Stopwatch.StartNew();
-            if (selectedAlgoritm == 0)
+            if (selectedAlgoritm == 0) //libwebp
             {
+
                 string command = "";
                 for (int i = 0; i < filesArray.Length; i++)
                 {
-                    if (ResizeCHB.IsChecked == true)
+                    FileInfo file = new FileInfo(filesArray[i].ToString());
+                    if (file.Exists)
                     {
-                        command = "/C cwebp -q " + compressLevel + " -resize 1280 1920 " + filesArray[i].ToString() + " -o " + pathToFolderWithCropFiles + filesArray[i].ToString().Remove(0, FilesFolderPathTB.Text.Length);
-                    }
-                    else
-                    {
-                        command = "/C cwebp -q " + compressLevel + " " + filesArray[i].ToString() + " -o " + pathToFolderWithCropFiles + filesArray[i].ToString().Remove(0, FilesFolderPathTB.Text.Length);
+                        long size = file.Length;
+                        if (size <= 1000000)
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            if (ResizeCHB.IsChecked == true)
+                            {
+                                string outputFileName = pathToFolderWithCropFiles + filesArray[i].ToString().Remove(0, FilesFolderPathTB.Text.Length);
+                                outputFileName = outputFileName.Replace(".jpg", ".webp");
+                                command = "/C cwebp -q " + compressLevel + " -resize 1280 1920 " + filesArray[i].ToString() + " -o " + outputFileName;
+                            }
+                            else
+                            {
+                                string outputFileName = pathToFolderWithCropFiles + filesArray[i].ToString().Remove(0, FilesFolderPathTB.Text.Length);
+                                outputFileName = outputFileName.Replace(".jpg", ".webp");
+                                command = "/C cwebp -q " + compressLevel + " " + filesArray[i].ToString() + " -o " + outputFileName;
+                            }
+
+                            System.Diagnostics.Process.Start("CMD.exe", command);
+                            System.Threading.Thread.Sleep(timeout);
+                            //Console.WriteLine(command.ToString());
+                            Log("run this command: " + command);
+                            command = "";
+                            //example: cwebp - q 80 - resize 1920 1080 m.jpg - o m2.jpg
+                        }
                     }
 
-                    System.Diagnostics.Process.Start("CMD.exe", command);
-                    System.Threading.Thread.Sleep(timeout);
-                    //Console.WriteLine(command.ToString());
-                    Log("run this command: " + command);
-                    command = "";
-                    //example: cwebp - q 80 - resize 1920 1080 m.jpg - o m2.jpg
                 }
             }
             else
@@ -130,21 +158,35 @@ namespace CatalogResizer
                 string command = "";
                 for (int i = 0; i < filesArray.Length; i++)
                 {
-                    if (ResizeCHB.IsChecked == true)
+                    FileInfo file = new FileInfo(filesArray[i].ToString());
+                    if (file.Exists)
                     {
-                        command = "/C pingo.exe -jpgquality=" + compressLevel + " -resize=1920 " + filesArray[i].ToString();
-                    }
-                    else
-                    {
-                        command = "/C pingo.exe -jpgquality=" + compressLevel + " " + filesArray[i].ToString();
+                        long size = file.Length;
+                        if (size <= 1000000)
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            if (ResizeCHB.IsChecked == true)
+                            {
+                                command = "/C pingo.exe -jpgquality=" + compressLevel + " -resize=1920 " + "\"" + filesArray[i].ToString() + "\"";
+                            }
+                            else
+                            {
+                                command = "/C pingo.exe -jpgquality=" + compressLevel + " \"" + filesArray[i].ToString() + "\"";
+                            }
+
+                            System.Diagnostics.Process.Start("CMD.exe", command);
+                            System.Threading.Thread.Sleep(timeout);
+                            //Console.WriteLine(command.ToString());
+                            Log("run this command: " + command);
+                            command = "";
+                            //example:/C pingo.exe -jpgquality=100 [-resize=1920] m.jpg
+                        }
+
                     }
 
-                    System.Diagnostics.Process.Start("CMD.exe", command);
-                    System.Threading.Thread.Sleep(timeout);
-                    //Console.WriteLine(command.ToString());
-                    Log("run this command: " + command);
-                    command = "";
-                    //example:/C pingo.exe -jpgquality=100 [-resize=1920] m.jpg
                 }
             }
 
@@ -157,7 +199,7 @@ namespace CatalogResizer
 
             if (selectedAlgoritm == 0)
             {
-                cropFilesArray = Directory.GetFiles(pathToFolderWithCropFiles, "*.jpg");
+                cropFilesArray = Directory.GetFiles(pathToFolderWithCropFiles, "*.webp");
                 foreach (string filename in cropFilesArray)
                 {
                     CompressLB.Items.Add(filename);
@@ -175,7 +217,7 @@ namespace CatalogResizer
             }
 
             System.Threading.Thread.Sleep(5000);
-            MessageBox.Show("Количество отформатированных файлов: " + cropFilesArray.Length.ToString() + "\nВремя выполнения обработки:" + minutes + seconds, "Обработка завершена", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show("Количество отформатированных файлов: " + cropFilesArray.Length.ToString() + "\nВремя выполнения обработки:" + minutes + ":" + seconds, "Обработка завершена", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private int GetCompressLevel()
@@ -234,6 +276,16 @@ namespace CatalogResizer
         {
             //MessageBox.Show(LibChoiceCB.SelectedIndex.ToString());
             selectedAlgoritm = LibChoiceCB.SelectedIndex;
+            if (LibChoiceCB.SelectedIndex == 1)
+            {
+                CompressFilesFolderPathTB.IsEnabled = false;
+                ChoseFolderForCompressFilesBTN.IsEnabled = false;
+            }
+            else
+            {
+                CompressFilesFolderPathTB.IsEnabled = true;
+                ChoseFolderForCompressFilesBTN.IsEnabled = true;
+            }
         }
     }
 }
