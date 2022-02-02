@@ -5,28 +5,25 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CatalogResizer"
         mc:Ignorable="d"
-        Title="CatalogResizer" Height="429" Width="800" MinHeight="427" MinWidth="700" Icon="Resource/resize.ico" WindowStartupLocation="CenterScreen">
+        Title="CatalogResizer" Height="479" Width="800" MinHeight="427" MinWidth="700" Icon="Resource/resize.ico" WindowStartupLocation="CenterScreen">
     <Window.TaskbarItemInfo>
         <TaskbarItemInfo Description="asdad"/>
     </Window.TaskbarItemInfo>
     <Grid Margin="-1,0,1,0">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
-            <ColumnDefinition Width="136"/>
-            <ColumnDefinition Width="136"/>
+            <ColumnDefinition Width="272"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <ListBox x:Name="FilesLB" Margin="10,41,10,10" MouseDoubleClick="FilesLB_MouseDoubleClick"/>
-        <ListBox x:Name="CompressLB" Margin="10,41,10,10" Grid.Column="3" MouseDoubleClick="CompressLB_MouseDoubleClick"/>
-        <Label Content="Список исходных файлов" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.016,-0.079" Height="26" Width="293" Grid.ColumnSpan="2"/>
-        <Label Content="Список сжатых файлов" HorizontalAlignment="Left" Margin="10,10,-43,0" VerticalAlignment="Top" Grid.Column="3" Height="26" Width="293"/>
-        <Button x:Name="ChoseFolderWithFikesBTN" Grid.ColumnSpan="2" Content="Выбрать папку с фото" Margin="10,69,10,0" Grid.Column="1" Height="20" VerticalAlignment="Top" Click="ChoseFolderWithFikesBTN_Click"/>
-        <TextBox x:Name="FilesFolderPathTB" Grid.ColumnSpan="2" Grid.Column="1" Height="23" Margin="10,41,10,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
-        <Button x:Name="ChoseFolderForCompressFilesBTN" Grid.ColumnSpan="2" Content="Выбрать папку для сжатых файлов" Margin="10,122,10,0" Grid.Column="1" Height="20" VerticalAlignment="Top" Click="ChoseFolderForCompressFilesBTN_Click"/>
-        <TextBox x:Name="CompressFilesFolderPathTB" Grid.ColumnSpan="2" Grid.Column="1" Height="23" Margin="10,94,10,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
-        <Border BorderBrush="#FFABADB3" BorderThickness="1" Grid.Column="1" Height="127" Margin="10,174,10,0" VerticalAlignment="Top" Grid.ColumnSpan="2">
-            <StackPanel Height="119" Margin="3,3,3,3" VerticalAlignment="Top">
-                <Label Content="Уровень качества сжатых фото" Height="26"/>
+        <ListBox x:Name="CompressLB" Margin="10,41,10,10" Grid.Column="2" MouseDoubleClick="CompressLB_MouseDoubleClick"/>
+        <Label Content="Список исходных файлов" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.016,-0.079" Height="26" Width="272" Grid.ColumnSpan="2"/>
+        <Label Content="Список сжатых файлов" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Grid.Column="2" Height="26" Width="293"/>
+        <Button x:Name="CompressBTN" Content="Сжать и переместить" Grid.Column="1" Margin="10,409,10,0" VerticalAlignment="Top" Click="CompressBTN_Click" Height="20"/>
+        <Label Content="Тайм-аут между процессами (мс)" Grid.Column="1" Margin="10,378,48,0" VerticalAlignment="Top" AutomationProperties.HelpText="Опреляет, какое количество времени пройдет между началом обработки предыдущей и следующей картинки" Padding="0,5,5,5"/>
+        <TextBox x:Name="TimeOutTB" Grid.Column="1" Height="19" Margin="0,383,10,0" TextWrapping="Wrap" Text="1500" VerticalAlignment="Top" Width="51" PreviewTextInput="TimeOutTB_PreviewTextInput" HorizontalAlignment="Right" AutomationProperties.HelpText="Опреляет, какое количество времени пройдет между началом обработки предыдущей и следующей картинки"/>
+        <GroupBox Header="Уровень качества сжатых фото" Margin="0,259,0,0" Height="111" VerticalAlignment="Top" Grid.Column="1">
+            <StackPanel Height="119" Margin="4,0,12,0" VerticalAlignment="Top">
                 <RadioButton x:Name="RB100" Content="100%"/>
                 <RadioButton x:Name="RB90" Content="90%" IsChecked="True"/>
                 <RadioButton x:Name="RB80" Content="80%"/>
@@ -34,15 +31,22 @@
                 <RadioButton x:Name="RB60" Content="60%"/>
                 <RadioButton x:Name="RB50" Content="50%"/>
             </StackPanel>
-        </Border>
-        <Button x:Name="CompressBTN" Content="Сжать и переместить" Grid.Column="1" Margin="10,357,10,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Click="CompressBTN_Click" Height="20"/>
-        <CheckBox x:Name="ResizeCHB" Content="Изменять разрешение на 1280х1920" Grid.Column="1" Margin="10,306,10,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Height="15" AutomationProperties.HelpText="Принудительно откорректирует разрешение фотографии до 1280х1920 без учета соотношения сторон фотографии"/>
-        <Label Content="Тайм-аут между процессами (мс)" Grid.Column="1" Margin="10,326,62,0" VerticalAlignment="Top" Grid.ColumnSpan="2" AutomationProperties.HelpText="Опреляет, какое количество времени пройдет между началом обработки предыдущей и следующей картинки" Padding="0,5,5,5"/>
-        <TextBox x:Name="TimeOutTB" Grid.Column="2" Height="19" Margin="0,330,10,0" TextWrapping="Wrap" Text="1500" VerticalAlignment="Top" Width="47" PreviewTextInput="TimeOutTB_PreviewTextInput" HorizontalAlignment="Right" AutomationProperties.HelpText="Опреляет, какое количество времени пройдет между началом обработки предыдущей и следующей картинки"/>
-        <ComboBox x:Name="LibChoiceCB" Grid.Column="1" HorizontalAlignment="Left" Margin="10,147,0,0" VerticalAlignment="Top" Width="252" Grid.ColumnSpan="2" SelectionChanged="LibChoiceCB_SelectionChanged" SelectedIndex="0">
-            <TextBlock>libwebp</TextBlock>
-            <TextBlock>pingo</TextBlock>
-        </ComboBox>
+        </GroupBox>
+        <GroupBox Grid.Column="1" Header="Папки и метод сжатия" Margin="0,36,0,0" Height="218" VerticalAlignment="Top" IsManipulationEnabled="True">
+            <StackPanel Margin="0,5,0,5" Orientation="Vertical">
+                <TextBox x:FieldModifier="public" x:Name="FilesFolderPathTB" Height="23" TextWrapping="Wrap" Width="252" Margin="0,3,0,3"/>
+                <Button x:FieldModifier="public" x:Name="ChoseFolderWithFilesBTN" Content="Выбрать папку с фото" Height="20" Click="ChoseFolderWithFikesBTN_Click" Width="252" Margin="0,3,0,3"/>
+                <TextBox x:FieldModifier="public" x:Name="CompressFilesFolderPathTB" Height="23" TextWrapping="Wrap" Width="252" Margin="0,3,0,3"/>
+                <Button x:FieldModifier="public" x:Name="ChoseFolderForCompressFilesBTN" Content="Выбрать папку для сжатых файлов" Height="20" Click="ChoseFolderForCompressFilesBTN_Click" Width="252" Margin="0,3,0,3"/>
+                <Separator/>
+                <ComboBox x:FieldModifier="public" x:Name="LibChoiceCB" SelectedIndex="0" Width="248" Height="23" SelectionChanged="LibChoiceCB_SelectionChanged" Margin="0,3,0,3">
+                    <TextBlock><Run Text="libwebp"/></TextBlock>
+                    <TextBlock><Run Text="pingo"/></TextBlock>
+                </ComboBox>
+                <CheckBox x:Name="ResizeCHB" Content="Изменять разрешение на 1280х1920" Height="15" AutomationProperties.HelpText="Принудительно откорректирует разрешение фотографии до 1280х1920 без учета соотношения сторон фотографии" Checked="ResizeCHB_Checked" Unchecked="ResizeCHB_Unchecked" Width="252" Margin="0,3,0,3"/>
+                <CheckBox x:Name="IgnoreOneMBCHB" Content="Также и для фото &lt; 1 Мб" Width="252" Margin="0,3,0,3"/>
+            </StackPanel>
+        </GroupBox>
 
     </Grid>
 </Window>

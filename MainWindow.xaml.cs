@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Forms;
 using System.Windows.Input;
+using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace CatalogResizer
 {
@@ -19,6 +22,7 @@ namespace CatalogResizer
             InitializeComponent();
             FilesFolderPathTB.Text = @"D:\photo_for_site\";
             CompressFilesFolderPathTB.Text = @"D:\photo_for_site_crop\";
+            IgnoreOneMBCHB.IsEnabled = false;
         }
 
         private void ChoseFolderWithFikesBTN_Click(object sender, RoutedEventArgs e)
@@ -29,35 +33,50 @@ namespace CatalogResizer
 
         private void ChoseFolderForCompressFilesBTN_Click(object sender, RoutedEventArgs e)
         {
-            string path = ChoseFolderPath();
+            string path = ChoseFolderPath2();
             CompressFilesFolderPathTB.Text = path.ToString() + @"\";
         }
-
+        private string ChoseFolderPath2()
+        {
+            var dialog = new CommonOpenFileDialog();
+            dialog.IsFolderPicker = true;
+            CommonFileDialogResult result = dialog.ShowDialog();
+            return dialog.FileName.ToString();
+            //using (var dialog = new System.Windows.Forms.FolderBrowserDialog())
+            //{
+            //    System.Windows.Forms.DialogResult result = dialog.ShowDialog();
+            //    return result.ToString();
+            //}
+        }
         private string ChoseFolderPath()
         {
-            // Create a "Save As" dialog for selecting a directory (HACK)
-            var dialog = new Microsoft.Win32.SaveFileDialog();
-            var textbox = new TextBox();
-            dialog.InitialDirectory = textbox.Text; // Use current value for initial dir
-            dialog.Title = "Select a Directory"; // instead of default "Save As"
-            dialog.Filter = "Directory|*.this.directory"; // Prevents displaying files
-            dialog.FileName = "select"; // Filename will then be "select.this.directory"
-            if (dialog.ShowDialog() == true)
-            {
-                string path = dialog.FileName;
-                // Remove fake filename from resulting path
-                path = path.Replace("\\select.this.directory", "");
-                path = path.Replace(".this.directory", "");
-                // If user has changed the filename, create the new directory
-                if (!System.IO.Directory.Exists(path))
-                {
-                    System.IO.Directory.CreateDirectory(path);
-                }
-                // Our final value is in path
-                textbox.Text = path;
-                return path;
-            }
-            return "";
+            var dialog = new CommonOpenFileDialog();
+            dialog.IsFolderPicker = true;
+            CommonFileDialogResult result = dialog.ShowDialog();
+            return dialog.FileName.ToString();
+            /*            // Create a "Save As" dialog for selecting a directory (HACK)
+                        var dialog = new Microsoft.Win32.SaveFileDialog();
+                        var textbox = new TextBox();
+                        dialog.InitialDirectory = textbox.Text; // Use current value for initial dir
+                        dialog.Title = "Select a Directory"; // instead of default "Save As"
+                        dialog.Filter = "Directory|*.this.directory"; // Prevents displaying files
+                        dialog.FileName = "select"; // Filename will then be "select.this.directory"
+                        if (dialog.ShowDialog() == true)
+                        {
+                            string path = dialog.FileName;
+                            // Remove fake filename from resulting path
+                            path = path.Replace("\\select.this.directory", "");
+                            path = path.Replace(".this.directory", "");
+                            // If user has changed the filename, create the new directory
+                            if (!System.IO.Directory.Exists(path))
+                            {
+                                System.IO.Directory.CreateDirectory(path);
+                            }
+                            // Our final value is in path
+                            textbox.Text = path;
+                            return path;
+                        }
+                        return "";*/
         }
 
         private void CompressBTN_Click(object sender, RoutedEventArgs e)
@@ -70,19 +89,18 @@ namespace CatalogResizer
 
             if (pathToFolderWithFiles == "" || pathToFolderWithCropFiles == "")
             {
-                MessageBox.Show("Неправильно выбрана папка", "Error", MessageBoxButton.OKCancel, MessageBoxImage.Error);
+                System.Windows.MessageBox.Show("Неправильно выбрана папка", "Error", MessageBoxButton.OKCancel, MessageBoxImage.Error);
             }
 
             if (!Directory.Exists(pathToFolderWithCropFiles))
             {
                 Directory.CreateDirectory(pathToFolderWithCropFiles);
             }
+
             if (!Directory.Exists(pathToFolderWithFiles))
             {
                 Directory.CreateDirectory(pathToFolderWithFiles);
             }
-
-
 
             string[] filesArray = Directory.GetFiles(pathToFolderWithFiles, "*.jpg");
             foreach (string filename in filesArray)
@@ -91,21 +109,16 @@ namespace CatalogResizer
                 Log("add inpit file: " + filename);
             }
 
-            //if (!Directory.Exists(pathToFolderWithCropFiles))
-            //{
-            //    Directory.CreateDirectory(pathToFolderWithCropFiles);
-            //}
-
             int compressLevel = Convert.ToInt32(GetCompressLevel());
             if (compressLevel < 50)
             {
-                MessageBox.Show("Некорректное значение степени сжатия", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                System.Windows.MessageBox.Show("Некорректное значение степени сжатия", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
             int timeout = Convert.ToInt32(TimeOutTB.Text);
             if (timeout <= 500)
             {
-                MessageBoxResult result = MessageBox.Show("Выбран низкий уровень задержки между запусками процессов. \nЭто может привести к появлению большого количества параллельных процессов и нагрузит систему. \nВы действительно хотите продолжить с заданными вами условиями?", "Info", MessageBoxButton.YesNo, MessageBoxImage.Information);
+                MessageBoxResult result = System.Windows.MessageBox.Show("Выбран низкий уровень задержки между запусками процессов. \nЭто может привести к появлению большого количества параллельных процессов и нагрузит систему. \nВы действительно хотите продолжить с заданными вами условиями?", "Info", MessageBoxButton.YesNo, MessageBoxImage.Information);
                 if (result == MessageBoxResult.No)
                 {
                     timeout = 1500;
@@ -123,7 +136,7 @@ namespace CatalogResizer
                     if (file.Exists)
                     {
                         long size = file.Length;
-                        if (size <= 1000000)
+                        if (size <= 1000000 & IgnoreOneMBCHB.IsChecked == false)
                         {
                             continue;
                         }
@@ -162,7 +175,7 @@ namespace CatalogResizer
                     if (file.Exists)
                     {
                         long size = file.Length;
-                        if (size <= 1000000)
+                        if (size <= 1000000 & IgnoreOneMBCHB.IsChecked == false)
                         {
                             continue;
                         }
@@ -217,8 +230,10 @@ namespace CatalogResizer
             }
 
             System.Threading.Thread.Sleep(5000);
-            MessageBox.Show("Количество отформатированных файлов: " + cropFilesArray.Length.ToString() + "\nВремя выполнения обработки:" + minutes + ":" + seconds, "Обработка завершена", MessageBoxButton.OK, MessageBoxImage.Information);
+            System.Windows.MessageBox.Show("Количество измененных файлов: " + cropFilesArray.Length.ToString() + "\nВремя выполнения обработки:" + minutes + ":" + seconds, "Обработка завершена", MessageBoxButton.OK, MessageBoxImage.Information);
         }
+
+            
 
         private int GetCompressLevel()
         {
@@ -272,20 +287,67 @@ namespace CatalogResizer
             System.Diagnostics.Process.Start(CompressLB.SelectedItem.ToString());
         }
 
-        private void LibChoiceCB_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void ResizeCHB_Checked(object sender, RoutedEventArgs e)
         {
-            //MessageBox.Show(LibChoiceCB.SelectedIndex.ToString());
-            selectedAlgoritm = LibChoiceCB.SelectedIndex;
-            if (LibChoiceCB.SelectedIndex == 1)
+            /*if (ResizeCHB.IsChecked == false)
             {
-                CompressFilesFolderPathTB.IsEnabled = false;
-                ChoseFolderForCompressFilesBTN.IsEnabled = false;
+                IgnoreOneMBCHB.IsEnabled = false;
+            }
+            else*/ IgnoreOneMBCHB.IsEnabled = true;
+        }
+
+        private void ResizeCHB_Unchecked(object sender, RoutedEventArgs e)
+        {
+            IgnoreOneMBCHB.IsEnabled = false;
+            IgnoreOneMBCHB.IsChecked = false;
+        }
+
+        /*private void LibChoiceCB_SelectionChanged(object sender, SelectionChangedEventArgs e, System.Windows.Controls.TextBox compressFilesFolderPathTB, System.Windows.Controls.Button choseFolderForCompressFilesBTN)
+        {
+            selectedAlgoritm = LibChoiceCB.SelectedIndex;
+            if (LibChoiceCB.SelectedIndex != 1)
+            {
+                compressFilesFolderPathTB.IsEnabled = true;
+                choseFolderForCompressFilesBTN.IsEnabled = true;
             }
             else
+            {
+                compressFilesFolderPathTB.IsEnabled = false;
+                choseFolderForCompressFilesBTN.IsEnabled = false;
+            }
+        }*/
+
+        private void LibChoiceCB_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            selectedAlgoritm = LibChoiceCB.SelectedIndex;
+            if (selectedAlgoritm != 1)
             {
                 CompressFilesFolderPathTB.IsEnabled = true;
                 ChoseFolderForCompressFilesBTN.IsEnabled = true;
             }
+            else
+            {
+                CompressFilesFolderPathTB.IsEnabled = false;
+                ChoseFolderForCompressFilesBTN.IsEnabled = false;
+            }
         }
+
+
+        //NotifyIcon NI = new NotifyIcon();
+
+        /*private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            NI.BalloonTipText = "Текст";
+            NI.BalloonTipTitle = "Заголовок";
+            NI.BalloonTipIcon = ToolTipIcon.Info;
+            NI.BalloonTipIcon = ToolTipIcon.Info;
+            NI.Visible = true;
+            NI.ShowBalloonTip(10000);
+        }
+
+        private void NI_BalloonTipClosed(Object sender, EventArgs e)
+        {
+            NI.Visible = false;
+        }*/
     }
 }

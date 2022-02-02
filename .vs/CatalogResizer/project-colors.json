@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "030c6129-a228-41d8-8b9f-7ed041179a5e": {
+      "ProjectGuid": "030c6129-a228-41d8-8b9f-7ed041179a5e",
+      "DisplayName": "CatalogResizer",
+      "ColorIndex": 0
+    }
+  },
+  "NextColorIndex": 1
+}

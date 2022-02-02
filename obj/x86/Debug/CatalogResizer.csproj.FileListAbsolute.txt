@@ -29,3 +29,8 @@ D:\project\CatalogResizer\CatalogResizer\obj\x86\Debug\CatalogResizer.csproj.Gen
 D:\project\CatalogResizer\CatalogResizer\obj\x86\Debug\CatalogResizer.csproj.CoreCompileInputs.cache
 D:\project\CatalogResizer\CatalogResizer\obj\x86\Debug\CatalogResizer.exe
 D:\project\CatalogResizer\CatalogResizer\obj\x86\Debug\CatalogResizer.pdb
+D:\project\CatalogResizer\CatalogResizer\bin\x86\Debug\Microsoft.WindowsAPICodePack.dll
+D:\project\CatalogResizer\CatalogResizer\bin\x86\Debug\Microsoft.WindowsAPICodePack.Shell.dll
+D:\project\CatalogResizer\CatalogResizer\bin\x86\Debug\Microsoft.WindowsAPICodePack.xml
+D:\project\CatalogResizer\CatalogResizer\bin\x86\Debug\Microsoft.WindowsAPICodePack.Shell.xml
+D:\project\CatalogResizer\CatalogResizer\obj\x86\Debug\CatalogResizer.csproj.CopyComplete
